@@ -1,0 +1,132 @@
+<!--
+  일어일문학과 2025131457 김범준
+  라면 전문 특화 맵 애플리케이션 (Ramen Special Map Web Application)
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramen Map - 라면 전문 특화 맵</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="사용자의 취향에 맞는 스프 계통(돈코츠, 미소, 이에케 등)과 면 굵기 필터링 기능을 탑재한 라면 전문 특화 위치 기반 지도 웹 애플리케이션입니다.">
+  <meta name="keywords" content="라면 지도, 라멘 지도, 라멘 맵, 돈코츠, 이에케, 신촌 라면, 홍대 라면, 라멘 필터, 라멘 맛집">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar for Navigation & Filters -->
+    <aside class="sidebar" id="sidebar">
+      <!-- App Header -->
+      <header class="app-header">
+        <div class="logo">
+          <i class="fa-solid fa-bowl-food logo-icon"></i>
+          <h1>Ramen<span>Map</span></h1>
+        </div>
+        <p class="subtitle">내 취향에 딱 맞는 인생 라멘 찾기</p>
+      </header>
+      
+      <!-- Search & Filters Container -->
+      <section class="control-panel">
+        <!-- Text Search -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="가게 이름 또는 주소 검색...">
+          <button id="clear-search" class="clear-btn" aria-label="검색어 초기화"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <!-- Soup Type Filters -->
+        <div class="filter-section">
+          <h3 class="section-title">스프 계통 <span class="filter-hint">(중복 선택 가능)</span></h3>
+          <div class="soup-filter-chips" id="soup-filters">
+            <button class="chip active" data-soup="all">전체</button>
+            <button class="chip" data-soup="돈코츠">돈코츠</button>
+            <button class="chip" data-soup="쇼유">쇼유</button>
+            <button class="chip" data-soup="미소">미소</button>
+            <button class="chip" data-soup="시오">시오</button>
+            <button class="chip" data-soup="이에케">이에케</button>
+            <button class="chip" data-soup="토리파이탄">토리파이탄</button>
+          </div>
+        </div>
+        
+        <!-- Toggle Filters (Open Now, Current Location Status) -->
+        <div class="toggle-section">
+          <div class="toggle-item">
+            <div class="toggle-label-group">
+              <i class="fa-solid fa-clock-rotate-left toggle-icon"></i>
+              <div>
+                <span class="toggle-title">현재 영업 중</span>
+                <span class="toggle-desc">지금 먹을 수 있는 가게만 보기</span>
+              </div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="open-now-toggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Noodle Thickness Info Filter (Optional visual tag) -->
+        <div class="status-summary" id="results-count-container">
+          검색 결과: <span id="results-count">0</span>곳의 라멘집
+        </div>
+      </section>
+      
+      <!-- Ramen Shop List -->
+      <section class="list-panel">
+        <div class="shop-list" id="shop-list-container">
+          <!-- Dynamically filled with JS -->
+          <div class="list-placeholder">
+            <div class="spinner"></div>
+            <p>라멘집 목록을 로딩 중입니다...</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Noodle detail view sheet (Slides up inside sidebar or overlay) -->
+      <section class="detail-panel" id="detail-panel">
+        <button class="close-detail-btn" id="close-detail" aria-label="상세 정보 닫기">
+          <i class="fa-solid fa-arrow-left"></i> 목록으로
+        </button>
+        <div class="detail-content" id="detail-content">
+          <!-- Dynamically filled on selection -->
+        </div>
+      </section>
+    </aside>
+    
+    <!-- Map Container -->
+    <main class="map-container-wrapper">
+      <!-- Floating Control for Mobile sidebar toggle -->
+      <button class="mobile-toggle-btn" id="mobile-toggle" aria-label="목록 보기">
+        <i class="fa-solid fa-list-ul"></i> 목록 및 필터
+      </button>
+      
+      <!-- Geolocation Control Button -->
+      <button class="geo-btn" id="geo-locate-btn" title="내 위치로 이동">
+        <i class="fa-solid fa-location-crosshairs"></i>
+      </button>
+      
+      <div id="map"></div>
+    </main>
+  </div>
+  
+  <!-- Leaflet Map JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
+  <!-- App JS -->
+  <script src="app.js" defer></script>
+</body>
+</html>
